@@ -1,17 +1,11 @@
-import datetime
+from django.urls import path
 
-from django.test import TestCase
-from django.utils import timezone
+from . import views
 
-from .models import Question
-
-
-class QuestionModelTests(TestCase):
-    def test_was_published_recently_with_future_question(self):
-        """
-        was_published_recently() returns False for questions whose pub_date
-        is in the future.
-        """
-        time = timezone.now() + datetime.timedelta(days=30)
-        future_question = Question(pub_date=time)
-        self.assertIs(future_question.was_published_recently(), False)
+app_name = "polls"
+urlpatterns = [
+    path("", views.IndexView.as_view(), name="index"),
+    path("<int:pk>/", views.DetailView.as_view(), name="detail"),
+    path("<int:pk>/results/", views.ResultsView.as_view(), name="results"),
+    path("<int:question_id>/vote/", views.vote, name="vote"),
+]
